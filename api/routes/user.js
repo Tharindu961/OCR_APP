@@ -15,7 +15,7 @@ router.post('/signup', (req, res, next) => {
                         message: 'Mail exists'
                     });
                 } else {
-                    bcrypt.hash(req.body.email, 10, (err, hash) => {
+                    bcrypt.hash(req.body.password, 10, (err, hash) => {
                         if (err) {
                             return res.status(500).json({
                                 error: err
@@ -52,6 +52,7 @@ router.post('/signup', (req, res, next) => {
 });
 
 router.post('/login', (req, res, next) => {
+    console.log('sss');
     User.find({ email: req.body.email })
         .exec()
         .then(user => {

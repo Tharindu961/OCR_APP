@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
 //const upload = multer({dest: 'uploads/'});
+const checkAuth = require('../middleware/check-auth');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -32,6 +33,12 @@ const upload = multer({
 });
 
 const Product = require('../models/product');
+
+// router.get('/hello', (req, res) => {
+//         res.status(200).json({
+//             message: 'hello'
+//         });
+// });
 
 router.get('/', (req, res, next) => {
     
@@ -71,7 +78,7 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.post('/', upload.single('productImage'), (req, res, next) => {  
+router.post('/', upload.single('productImage'), checkAuth, (req, res, next) => {  
     console.log(req.file);
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),

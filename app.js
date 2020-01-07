@@ -10,12 +10,13 @@ const orderRoutes = require('./api/routes/orders');
 const userRoutes = require('./api/routes/user');
 
 // mongoose.connect('mongodb://test:' + process.env.MONGO_ATLAS_PW + '@cluster0-shard-00-00-0c64g.mongodb.net:27017,cluster0-shard-00-01-0c64g.mongodb.net:27017,cluster0-shard-00-02-0c64g.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority',
-mongoose.connect('mongodb+srv://test:'+ process.env.MONGO_ATLAS_PW +'@cluster0-0c64g.mongodb.net/test?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://test:tharindu69@cluster0-0c64g.mongodb.net/test?retryWrites=true&w=majority',
 {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    //useMongoClient: true
+    // useMongoClient: true
     
+
 });
 
 mongoose.Promise = global.Promise;
