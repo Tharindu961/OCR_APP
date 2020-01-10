@@ -3,8 +3,13 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const Tesseract = require('tesseract.js');
+
 
 const User = require("../models/user");
+
+
 
 router.post('/signup', (req, res, next) => {
         User.find({email: req.body.email })
@@ -61,7 +66,7 @@ router.post('/login', (req, res, next) => {
                     message: 'Auth failed'
                 });
             }
-            bcrypt.compare(req.body.password, user[0].password, (err, res) => {
+            bcrypt.compare(req.body.password, user[0].password, (err, result) => {
                 if (err) {
                     return res.status(401).json({
                         message: 'Auth failed'
@@ -81,11 +86,13 @@ router.post('/login', (req, res, next) => {
                     );
                     return res.status(200).json({
                         message: 'Auth successful',
-                        token: token
+                        flag: true,
+                       
                     });
                 }
                     return res.status(401).json({
-                        message: 'Auth failed'
+                        message: 'Auth failed',
+                        flag : false
                     });
             });
 
@@ -112,6 +119,34 @@ router.delete('/:userId', (req, res, next) => {
             error: err
         });
     });
+});
+
+const storage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        callBack(null, 'uploads');
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, `${file.originalname}`);
+    }
+});
+
+var upload = multer({storage: storage});
+
+router.post('/image',upload.single('file'),(req,res,next) => {
+        const file = req.file;
+
+        Tesseract.recognize(
+            `./uploads/${file.originalname}`,
+            'eng',
+            { logger: m => console.log(m.progress) }
+          ).then(({ data: { text } }) => {
+            res.status(200).json({
+                message : text
+            });
+          })
+
+
+       
 });
 
 module.exports = router;
