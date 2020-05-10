@@ -39,6 +39,8 @@ app.use((req, res, next) => {
     next(); 
 });
 
+//Routes should handle request
+
 app.use('/user', userRoutes);
 
 app.use((req, res, next) =>{
